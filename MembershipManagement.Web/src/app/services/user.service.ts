@@ -4,22 +4,34 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
 import { AuthenticationService } from './authentication.service';
-import { User } from '../models/user';
 
 @Injectable()
 export class UserService {
+
     constructor(
         private http: Http,
         private authenticationService: AuthenticationService) {
     }
 
-    getUsers(): Observable<User[]> {
+    getUsers(): Observable<any> {
         // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
 
         // get users from api
         return this.http.get('/api/users', options)
-            .map((response: Response) => response.json());
+            .map(this.extractUser)
+            .catch(this.handleError);
+    }
+
+    private extractUser(res: Response): any {
+        let data = res.json();
+        console.log('data', data);
+        return data || {};
+    }
+
+    private handleError(error: Response): any {
+        console.error('error: ', error);
+        return Observable.throw(error.statusText);
     }
 }

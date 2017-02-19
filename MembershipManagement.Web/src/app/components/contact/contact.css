@@ -3,12 +3,12 @@
   max-width: 600px;
   margin: 0 auto;
 }
-.form-content .sd-form-control {
+.form-content .form-control {
   display: block;
   margin-bottom: 10px;
   width: 100%;
   padding: 10px;
 }
-.form-content textarea.sd-form-control {
+.form-content textarea.form-control {
   max-width: 100%;
 }

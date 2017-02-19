@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../../services/index';
 
 @Component({
-    templateUrl: './login.html'
+    templateUrl: './login.html',
+    styleUrls: ['./login.css']
 })
 
 export class LoginComponent implements OnInit {
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(result => {
                 if (result === true) {
-                    this.router.navigate(['/']);
+                    this.router.navigate(['/welcome']);
                 } else {
                     this.error = 'Username or password is incorrect';
                     this.loading = false;

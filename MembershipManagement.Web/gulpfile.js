@@ -1,4 +1,4 @@
-﻿/// <binding BeforeBuild='01-clean' AfterBuild='03-moveToHtmlCss, 02-webpack, 04-moveToLib, 05-moveToRootLib, 06-fonts' />
+﻿/// <binding BeforeBuild='01-clean' AfterBuild='03-moveToHtmlCss, 02-webpack, 04-moveToLib, 06-moveToRootLib, 07-moveToRootFont' />
 /*
 This file is the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. https://go.microsoft.com/fwlink/?LinkId=518007
@@ -15,8 +15,10 @@ var sourceDir = "./src",
 
 var paths = {
     npmSrc: "./node_modules/",
+    fontSrc: "./src/fonts/",
+    libTarget: "./wwwroot/lib/",
     fontTarget: "./wwwroot/fonts/",
-    libTarget: "./wwwroot/lib/"
+    imagesTarget: "./wwwroot/images/"
 };
 
 gulp.task('01-clean', function () {
@@ -76,19 +78,38 @@ gulp.task('04-moveToLib', function () {
     return gulp.src(bootstrapToMove).pipe(gulp.dest(sourceDir + '/lib'));
 });
 
-var libToMove = [
-    sourceDir + '/lib/*.*'
-];
-
-gulp.task('05-moveToRootLib', function () {
-    return gulp.src(libToMove).pipe(gulp.dest(paths.libTarget));
-});
-
-
-gulp.task('06-fonts', function () {
+gulp.task('05-fonts', function () {
     return gulp.src([
         paths.npmSrc + '/font-awesome/fonts/fontawesome-webfont.*',
         paths.npmSrc + '/bootstrap/fonts/*.*'
     ])
-        .pipe(gulp.dest(paths.fontTarget));
+        .pipe(gulp.dest(paths.fontSrc));
+});
+
+
+
+var libToMove = [
+    sourceDir + '/lib/*.*'
+];
+
+gulp.task('06-moveToRootLib', function () {
+    return gulp.src(libToMove).pipe(gulp.dest(paths.libTarget));
+});
+
+
+var fontsToMove = [
+    sourceDir + '/fonts/*.*'
+];
+
+gulp.task('07-moveToRootFont', function () {
+    return gulp.src(fontsToMove).pipe(gulp.dest(paths.fontTarget));
+});
+
+
+var imagesToMove = [
+    sourceDir + '/images/*.*'
+];
+
+gulp.task('08-moveToRootImages', function () {
+    return gulp.src(imagesToMove).pipe(gulp.dest(paths.imagesTarget));
 });

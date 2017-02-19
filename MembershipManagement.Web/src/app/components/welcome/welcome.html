@@ -1,0 +1,9 @@
+﻿<div class="col-md-6 col-md-offset-3">
+  <h1>Home</h1>
+  <p>You're logged in with JWT!!</p>
+  <div *ngIf = "user">
+    <h4>First Name : {{user.firstName}}</h4>
+    <h4>Last Name : {{user.lastName}}</h4>
+    <h4>Email : {{user.email}}</h4>
+  </div>
+</div>

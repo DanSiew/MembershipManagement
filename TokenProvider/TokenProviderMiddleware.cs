@@ -73,6 +73,12 @@ namespace TokenProvider
                 return;
             }
 
+            var email = (identity.FindFirst(ClaimTypes.Email) != null) ? identity.FindFirst(ClaimTypes.Email).Value : string.Empty;
+            var givenName = (identity.FindFirst(ClaimTypes.GivenName) != null) ? identity.FindFirst(ClaimTypes.GivenName).Value : string.Empty;
+            var surname = (identity.FindFirst(ClaimTypes.Surname) != null) ? identity.FindFirst(ClaimTypes.Surname).Value : string.Empty;
+            var id = (identity.FindFirst(ClaimTypes.SerialNumber) != null) ? identity.FindFirst(ClaimTypes.SerialNumber).Value : string.Empty;
+            var role = (identity.FindFirst(ClaimTypes.Role) != null) ? identity.FindFirst(ClaimTypes.Role).Value : string.Empty;
+
             var now = DateTime.UtcNow;
 
             // Specifically add the jti (nonce), iat (issued timestamp), and sub (subject/user) claims.
@@ -81,7 +87,13 @@ namespace TokenProvider
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim(JwtRegisteredClaimNames.Jti, await _options.NonceGenerator()),
-                new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(now).ToString(), ClaimValueTypes.Integer64)
+                new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(now).ToString(), ClaimValueTypes.Integer64),
+                new Claim(ClaimTypes.Email, email ),
+                new Claim(ClaimTypes.SerialNumber, id ),
+                new Claim(ClaimTypes.GivenName, givenName ),
+                new Claim(ClaimTypes.Surname, surname ),
+                new Claim(ClaimTypes.Role, role )
+
             };
 
             // Create the JWT and write it to a string
