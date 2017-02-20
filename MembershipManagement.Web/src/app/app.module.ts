@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { NgReduxModule } from '@angular-redux/store';
+import { NgReduxRouterModule } from '@angular-redux/router';
 
 import { NavbarComponent } from './navbar/navbar.component';
 
@@ -27,7 +29,9 @@ import { AuthenticationService, UserService, AuthGuard } from './services/index'
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        RouterModule.forRoot(rootRouterConfig, { useHash: true })
+        RouterModule.forRoot(rootRouterConfig, { useHash: true }),
+        NgReduxModule,
+        NgReduxRouterModule
     ],
     providers: [
         AuthenticationService,

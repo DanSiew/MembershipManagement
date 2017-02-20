@@ -29,6 +29,7 @@ var LoginComponent = (function () {
         this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(function (result) {
             if (result === true) {
+                window.location.reload();
                 _this.router.navigate(['/welcome']);
             }
             else {

@@ -12,6 +12,8 @@ var app_component_1 = require("./app.component");
 var forms_1 = require("@angular/forms");
 var platform_browser_1 = require("@angular/platform-browser");
 var http_1 = require("@angular/http");
+var store_1 = require("@angular-redux/store");
+var router_2 = require("@angular-redux/router");
 var navbar_component_1 = require("./navbar/navbar.component");
 var index_1 = require("./components/index");
 var index_2 = require("./services/index");
@@ -36,7 +38,9 @@ AppModule = __decorate([
             forms_1.FormsModule,
             forms_1.ReactiveFormsModule,
             http_1.HttpModule,
-            router_1.RouterModule.forRoot(app_routes_1.rootRouterConfig, { useHash: true })
+            router_1.RouterModule.forRoot(app_routes_1.rootRouterConfig, { useHash: true }),
+            store_1.NgReduxModule,
+            router_2.NgReduxRouterModule
         ],
         providers: [
             index_2.AuthenticationService,

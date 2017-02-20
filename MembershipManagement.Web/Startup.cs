@@ -11,6 +11,10 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Principal;
 using TokenProvider;
+using MembershipManagement.Domain;
+using Microsoft.EntityFrameworkCore;
+using MembershipManagement.Domain.Repositories;
+using MembershipManagement.Domain.Models;
 
 namespace MembershipManagement.Web
 {
@@ -28,9 +32,18 @@ namespace MembershipManagement.Web
 
     public IConfigurationRoot Configuration { get; set; }
 
+
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      var connectionString = Configuration.GetConnectionString("DefaultConnection");
+      services.AddDbContext<MembershipContext>(options =>
+                options.UseSqlServer(connectionString));
+
+
+      services.AddTransient<IGenericRepository<MembershipRole>, GenericRepository<MembershipRole, int>>();
+      services.AddScoped<IGenericRepository<MembershipUser>, GenericRepository<MembershipUser, Guid>>();
+
       // Add framework services.
       services.AddMvc();
     }

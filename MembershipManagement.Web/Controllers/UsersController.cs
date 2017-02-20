@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
+using MembershipManagement.Domain.Repositories;
+using MembershipManagement.Domain.Models;
 
 namespace MembershipManagement.Web.Controllers
 {
@@ -14,6 +16,8 @@ namespace MembershipManagement.Web.Controllers
   [Authorize]
   public class UsersController : Controller
   {
+    
+    
     public IActionResult Get()
     {
       // The JWT "sub" claim is automatically mapped to ClaimTypes.NameIdentifier

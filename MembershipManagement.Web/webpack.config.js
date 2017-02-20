@@ -1,4 +1,4 @@
-var webpack = require('webpack');
+﻿var webpack = require('webpack');
 var path = require('path');
 var webpackMerge = require('webpack-merge');
 
@@ -6,8 +6,8 @@ var webpackMerge = require('webpack-merge');
 var webpackConfig = {
   entry: {
     'main': './src/main.browser.ts',
-  },
-
+    },
+  
   output: {
     publicPath: '',
     path: path.resolve(__dirname, './dist'),
