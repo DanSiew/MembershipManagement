@@ -1,0 +1,273 @@
+@import './variables.less';
+@import './media.less';
+
+.btn {
+  border: none;
+  border-radius: 0;
+}
+
+.btn-primary {
+  border-radius: 0;
+}
+
+.btn-outline-dark {
+  border-radius: 0;
+  width: 100%;
+  border-top: @black4 solid 0.5px;
+}
+
+.btn-outline-dark:hover {
+  color: @white1;
+  background-color: @black4;
+  border-color: @black4;
+}
+
+.btn-light {
+  border: @black4 solid 0.5px;
+}
+
+.btn-space {
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.btn-dropdown {
+  width: 48px;
+  border: @black4 solid 0.5px;
+  border-radius: 0;
+  background: @white1;
+  height: 38px;
+}
+
+.btn-primary-disabled {
+  opacity: 0.65;
+}
+
+
+.modal-content {
+  border-radius: 0 !important;
+}
+
+.form-control {
+  border-radius: 0 !important;
+}
+
+.required {
+  color: red;
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 70px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.dialog-footer {
+  border-top: 0.1em solid @black5 !important;
+  width: 100%;
+  height: 70px;
+  background-color: @white4;
+  padding: 10px;
+  margin: 0;
+  right: 0;
+  left: 0;
+}
+
+
+.messages-container {
+  padding: 15px 0 15px 25px;
+  z-index: 999;
+  width: 100%;
+}
+
+.messages-error {
+  background: #f2dede;
+  color: #a94442;
+  border: 1px solid #ebcccc;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.messages-info {
+  background: #d9edf7;
+  color: #31708f;
+  border: 1px solid #bcdff1;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.messages-warn {
+  background: #fcf8e3;
+  color: #8a6d3b;
+  border: 1px solid #faf2cc;
+  margin-bottom: 10px;
+}
+
+.messages-success {
+  background: @green4;
+  color: @green1;
+  border: 1px solid @green4;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+
+.messages-finished {
+  background: @green4;
+  color: @green1;
+  border: 1px solid @green4;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  min-height: 50px;
+  padding: 20px;
+  width: 100%;
+}
+
+.form-field {
+  margin-bottom: 2px;
+}
+
+.form-text-field {
+  margin-bottom: 20px;
+}
+
+.w-5 {
+  width: 5% !important;
+}
+.w-7 {
+  width: 7% !important;
+}
+.w-8 {
+  width: 8% !important;
+}
+
+.w-10 {
+  width: 10% !important;
+}
+.w-13 {
+  width: 13% !important;
+}
+.w-14 {
+  width: 14% !important;
+}
+
+.w-15 {
+  width: 15% !important;
+}
+
+.w-19 {
+  width: 19% !important;
+}
+.w-20 {
+  width: 20% !important;
+}
+
+.w-22 {
+  width: 22% !important;
+}
+.w-23 {
+  width: 23% !important;
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.w-35 {
+  width: 35% !important;
+}
+.w-40 {
+  width: 40% !important;
+}
+.w-45 {
+  width: 45% !important;
+}
+.w-48 {
+  width: 48% !important;
+}
+.w-60 {
+  width: 60% !important;
+}
+.w-80 {
+  width: 80% !important;
+}
+.w-90 {
+  width: 90% !important;
+}
+.progress-bar {
+  &.bg-success {
+    background-color: @progress-bar-active-bg-color !important;
+    color: @progress-bar-active-text-color !important;
+  }
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: @placeholdergrey;
+}
+
+.list-group-item-action {
+  color: @black2;
+}
+
+.ctrl-focusable:focus,
+.ctrl-focusable.focus {
+  outline: 0 !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 76, 151, 0.25) !important;
+}
+
+.d-flex {
+  .table.table-responsive {
+    display: table;
+  }
+}
+
+
+ngb-tabset ul[role=tablist] .nav-item {
+  min-width: 200px;
+}
+
+
+@media @medium {
+  ngb-tabset ul[role=tablist] .nav-item {
+    min-width: 0px;
+  }
+
+  ngb-tabset ul[role=tablist] .nav-link {
+    font-size: 16px;
+  }
+}
+
+@media @small {
+  ngb-tabset ul[role=tablist] .nav-item {
+    min-width: 0px;
+  }
+
+  ngb-tabset ul[role=tablist] .nav-link {
+    font-size: 14px;
+  }
+}
+
+.sortable-icon {
+    padding-left: 10px;
+    color: @black4;
+  }
+
+ .wrap-word {
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -webkit-pre-wrap; /*Chrome & Safari */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: pre-wrap; /* css-3 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    word-break: break-all;
+    white-space: normal;
+  }
+
+.pointer {
+  cursor: pointer;
+}

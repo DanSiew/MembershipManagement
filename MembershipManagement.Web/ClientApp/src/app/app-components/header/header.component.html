@@ -1,0 +1,22 @@
+<div class="d-flex flex-row justify-content-between w-100">
+  <div class="header-content">
+    <div *ngIf="isNavMenuToggleEnabled$ | async" class="d-flex">
+      <button type="button"
+              class="btn btn-light menu-button"
+              (click)="openNavMenu()"
+              aria-label="Left navigation">
+        <img src="./assets/images/ic_menu_24px.svg" />
+      </button>
+    </div>
+    <div class="header-text"> Membership Management </div>
+  </div>
+
+  <div class="d-flex header-button">
+    <app-signup-button *ngIf="isLoggedOut$ | async" class="signup-button"></app-signup-button>
+    <app-login-button  *ngIf="isLoggedOut$ | async"class="login-button"></app-login-button>
+    <app-logout-button *ngIf="isLoggedIn$ | async"></app-logout-button>
+  </div>
+
+</div>
+
+

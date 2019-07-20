@@ -1,0 +1,53 @@
+<div class="signup-view-container">
+
+  <div class="d-flex flex-column signup-view-content">
+
+    <p>Please fill in this form to sign up.</p>
+
+    <form autocomplete="off" novalidate [formGroup]="form">
+
+      <div class="messages messages-error" *ngIf="errors?.length">
+        <div class="messages-container">
+          <div *ngFor="let error of errors">{{error}}</div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <app-text-input id="emailAddress" formControlName="emailAddress"
+                        [textInputModel]="textInputEmailAddress"
+                        [formControl]="form.controls.emailAddress">
+        </app-text-input>
+      </div>
+
+      <div class="form-field">
+        <app-password-input id="password" formControlName="password"
+                            [textInputModel]="textInputPassword"
+                            [formControl]="form.controls.password">
+        </app-password-input>
+      </div>
+
+      <div class="form-field">
+        <app-password-input id="confirmPassword" formControlName="confirmPassword"
+                            [textInputModel]="textInputConfirmPassword"
+                            [formControl]="form.controls.confirmPassword">
+        </app-password-input>
+      </div>
+    </form>
+  </div>
+
+  <div class="dialog-footer">
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-dark" (click)="closeClick()">
+        {{dialogData?.buttonCloseText}}
+      </button>
+      <button type="button" class="btn btn-primary" (click)="signUp()">
+        {{dialogData?.buttonOkText}}
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="showOverlay$ | async as showOverlay" class="dialog-overlay">
+  <div class="user-loader mx-auto"></div>
+</div>

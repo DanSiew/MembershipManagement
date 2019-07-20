@@ -1,0 +1,102 @@
+@import "../../styles/media.less";
+@import "../../styles/variables.less";
+
+/* Keep the nav menu independent of scrolling and on top of other items */
+:host {
+  border: @black4 solid 1px;
+  background-color: @white1;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+
+  nav.navbar {
+    background-color: @white1;
+    padding: 0;
+    overflow-y: auto;
+    cursor: pointer;
+    padding-bottom: 50px;
+  }
+
+  ul {
+    width: 100%;
+    overflow: auto;
+
+    li {
+      width: 100%;
+
+      .nav-link {
+        padding: 10px 10px 10px 10px;
+        border-bottom: @black4 solid 0.5px;
+      }
+
+      .nav-icon {
+        padding: 5px;
+      }
+
+      .nav-text {
+        vertical-align: middle;
+        font-size: 1rem;
+        color: @black3;
+      }
+
+      .nav-sub-menu-text {
+        vertical-align: middle;
+        font-size: 1rem;
+        color: @black3;
+        padding-left: 15px;
+      }
+    }
+  }
+  /* Highlighting rules for nav menu items */
+  li.link-active {
+    .nav-link {
+      border-left: @blue2 solid 3px;
+      background-color: @white4;
+      padding: 10px 10px 10px 7px !important;
+    }
+
+    .nav-text,
+    .nav-sub-menu-text {
+      font-weight: bold;
+      color: @black1 !important;
+      cursor: pointer;
+    }
+  }
+
+  li a:hover,
+  li a:focus {
+    background-color: @white4;
+  }
+
+  app-profile {
+    flex-shrink: 0;
+    border-bottom: @black4 solid 0.5px;
+  }
+}
+
+
+.navbar-container {
+  min-width: @nav-menu-width;
+  max-width: @nav-menu-width;
+}
+
+.navbar-container-width {
+  min-width: 230px;
+}
+
+.btn-nav-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.scroll-smooth {
+  -webkit-overflow-scrolling: touch;
+}

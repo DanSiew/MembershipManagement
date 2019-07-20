@@ -1,0 +1,20 @@
+<div class="form-group input-full-width">
+  <div *ngIf="showLabel">
+    <label for="textInputModel?.inputName">{{inputLabel}} <span *ngIf="setRequired()" class="required">*</span></label>
+  </div>
+  <input type="text"
+         [id]="textInputModel?.inputName"
+         class="form-control"
+         [placeholder]="placeholder"
+         [readonly]="readonly"
+         [disabled]="disable"
+         [(ngModel)]="value"
+         (blur)="onBlur($event)"
+         [attr.aria-required]="setRequired()"
+         [attr.aria-invalid]="formControl.invalid"
+         [attr.aria-describedby]="errorInputId">
+  <div class="form-error">
+    <show-errors [control]="formControl" [inputLabel]="errorInputLabel" [inputId]="errorInputId">
+    </show-errors>
+  </div>
+</div>

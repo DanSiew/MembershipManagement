@@ -1,0 +1,76 @@
+@import './styles/media.less';
+@import './styles/variables.less';
+
+@nav-menu-width: 250px;
+
+:host {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+
+  .main {
+    flex-grow: 1;
+    min-height: 100vh;
+    margin-left: 0;
+    overflow: hidden;
+  }
+
+  app-nav-menu {
+    position: fixed;
+    //min-width: 240px;
+    max-width: @nav-menu-width;
+    margin-left: 0;
+    height: 100vh;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .nav-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: @black2;
+    opacity: 0.1;
+    z-index: 900;
+  }
+
+  .scroll-container {
+    overflow-y: auto;
+    height: auto !important;
+  }
+}
+
+@media @large {
+  :host {
+    // On large screens, reserve a margin for the app-nav-menu
+    // *if* it exists in the DOM.
+    app-nav-menu + .main {
+      margin-left: @nav-menu-width;
+    }
+  }
+}
+
+@media @extra-large {
+  :host {
+    app-nav-menu + .main {
+      margin-left: @nav-menu-width;
+    }
+
+  }
+}
+
+.version-identifier {
+  position: absolute;
+  z-index: 5000;
+  bottom: 1em;
+  left: 1em;
+  padding: 0.15rem;
+  border: 1px dashed @red1;
+  color: @black2;
+  background-color: @white2;
+}
+
+

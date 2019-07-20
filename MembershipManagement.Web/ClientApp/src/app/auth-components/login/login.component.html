@@ -1,0 +1,41 @@
+<div class="login-view-container">
+
+  <div class="d-flex flex-column login-view-content">
+
+    <form autocomplete="off" novalidate [formGroup]="form">
+
+      <div class="messages messages-error" *ngIf="errors?.length">
+        <div class="messages-container">
+          <div *ngFor="let error of errors">{{error}}</div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <app-text-input id="emailAddress" formControlName="emailAddress"
+                        [textInputModel]="textInputEmailAddress"
+                        [formControl]="form.controls.emailAddress">
+        </app-text-input>
+      </div>
+
+      <div class="form-field">
+        <app-password-input id="password" formControlName="password"
+                            [textInputModel]="textInputPassword"
+                            [formControl]="form.controls.password">
+        </app-password-input>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="dialog-footer">
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-dark" (click)="closeClick()">
+        {{dialogData?.buttonCloseText}}
+      </button>
+      <button type="button" class="btn btn-primary" (click)="login()">
+        {{dialogData?.buttonOkText}}
+      </button>
+    </div>
+  </div>
+
+</div>

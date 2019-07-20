@@ -1,0 +1,74 @@
+<div id="navbarContainerId"
+     class="navbar-container scroll-smooth"
+     [ngClass]="{'navbar-container-width': hasScrollBar }">
+  <button aria-label="Close menu" *ngIf="isSmallScreen$ | async"
+          class="nav-link float-right btn-nav-close"
+          (click)='collapse()' title="Close menu">
+    <span class="nav-text">X</span>
+  </button>
+
+  <app-profile></app-profile>
+
+  <nav class="navbar">
+    <ul class="nav flex-column" id="navbarContent">
+      <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+        <a class="nav-link" [routerLink]='["/"]' (click)='toggle()' aria-label="Selected dashboard">
+          <span class="nav-icon"><img alt="Dashboard" src="./assets/images/ic_dashboard_24px.svg" width="18" height="18" /></span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+        <a class="nav-link" [routerLink]='["/counter"]' (click)='toggle()' aria-label="Selected dashboard">
+          <span class="nav-icon"><img alt="Counter" src="./assets/images/ic_dashboard_24px.svg" width="18" height="18" /></span>
+          <span class="nav-text">Counter</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+        <a class="nav-link" [routerLink]='["/fetch-data"]' (click)='toggle()' aria-label="Selected dashboard">
+          <span class="nav-icon"><img alt="Fetch Data" src="./assets/images/ic_dashboard_24px.svg" width="18" height="18" /></span>
+          <span class="nav-text">Fetch data</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+
+
+
+<!--
+
+<div class='main-nav'>
+  <div class='navbar navbar-inverse'>
+    <div class='navbar-header'>
+      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse' [attr.aria-expanded]='isExpanded' (click)='toggle()'>
+        <span class='sr-only'>Toggle navigation</span>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+      </button>
+      <a class='navbar-brand' [routerLink]='["/"]'>MembershipManagement.Web</a>
+    </div>
+    <div class='clearfix'></div>
+    <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
+      <ul class='nav navbar-nav'>
+        <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+          <a [routerLink]='["/"]' (click)='collapse()'>
+            <span class='glyphicon glyphicon-home'></span> Home
+          </a>
+        </li>
+        <li [routerLinkActive]='["link-active"]'>
+          <a [routerLink]='["/counter"]' (click)='collapse()'>
+            <span class='glyphicon glyphicon-education'></span> Counter
+          </a>
+        </li>
+        <li [routerLinkActive]='["link-active"]'>
+          <a [routerLink]='["/fetch-data"]' (click)='collapse()'>
+            <span class='glyphicon glyphicon-th-list'></span> Fetch data
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+-->

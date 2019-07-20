@@ -1,0 +1,48 @@
+@import '../../styles/variables.less';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  background-color: @white1;
+  padding: 40px 0px;
+  align-items: center;
+  text-align: center;
+
+  .profile-avatar > img {
+    width: 80px;
+    height: 80px;
+    border: 2px solid @black4;
+    border-radius: 100%;
+    color: @black4;
+  }
+
+  .profile-name {
+    margin-top: 10px;
+    max-width: 90%;
+  }
+
+  .profile-role {
+    color: @black2;
+  }
+
+  .image-loader-container {
+    width: 80px;
+    height: 80px;
+    display: block;
+  }
+
+  .image-loader {
+    position: relative;
+    border: 10px solid @black4;
+    border-top: 10px solid @blue3;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
