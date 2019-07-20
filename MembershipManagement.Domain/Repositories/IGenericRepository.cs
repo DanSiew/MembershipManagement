@@ -21,9 +21,9 @@ namespace MembershipManagement.Domain.Repositories
         Task<IEnumerable<TEntity>> GetPageAsync(int startRij, int aantal, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
 
-        TEntity Get(object id, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
+        TEntity Get(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
 
-        Task<TEntity> GetAsync(object id, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
+        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
 
         IEnumerable<TEntity> Query(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>,
             IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
@@ -35,22 +35,21 @@ namespace MembershipManagement.Domain.Repositories
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>,
                 IQueryable<TEntity>> includes = null);
 
-        Task<IEnumerable<TEntity>> QueryPageAsync(int startRij, int aantal, Expression<Func<TEntity, bool>> filter, 
+        Task<IEnumerable<TEntity>> QueryPageAsync(int startRij, int aantal, Expression<Func<TEntity, bool>> filter,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>,
                     IQueryable<TEntity>> includes = null);
 
-        void Load(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, 
+        void Load(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>,
             IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
 
-        Task LoadAsync(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
+        Task LoadAsync(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null);
 
-        void Add(TEntity entity);
+        object Add(TEntity entity);
 
         TEntity Update(TEntity entity);
 
         void Remove(TEntity entity);
-        //void Remove(o id);
 
         bool Any(Expression<Func<TEntity, bool>> filter = null);
 

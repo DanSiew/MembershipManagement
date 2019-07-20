@@ -11,6 +11,12 @@ namespace MembershipManagement.Domain
         { }
 
         public DbSet<MembershipUser> MembershipUsers { get; set; }
+
         public DbSet<MembershipRole> MembershipRoles { get; set; }
+
+        public DbSet<MembershipToken> MembershipTokens { get; set; }
+
+        public DbSet<MembershipClient> MembershipClients { get; set; }
+
     }
 }

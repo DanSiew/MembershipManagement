@@ -8,20 +8,24 @@ namespace MembershipManagement.Domain.Models
     [Table("MembershipUser")]
     public class MembershipUser : EntityBase<Guid>
     {
-        [Column("UserName")]
-        public string UserName { get; set; }
-        [Column("LastName")]
-        public string LastName { get; set; }
-        [Column("FirstName")]
-        public string FirstName { get; set; }
+
         [Column("Password")]
         public string Password { get; set; }
+
         [Column("Email")]
         public string Email { get; set; }
+
         [Column("RoleId")]
-        public int RoleId { get; set; }
+        public Guid RoleId { get; set; }
+
+        [Column("ClientId")]
+        public Guid ClientId { get; set; }
 
         [ForeignKey("RoleId")]
         public MembershipRole MembershipRole  { get; set; }
+
+        [ForeignKey("ClientId")]
+        public MembershipClient MembershipClient { get; set; }
+
     }
 }

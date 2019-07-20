@@ -69,31 +69,25 @@ namespace MembershipManagement.Domain.Repositories
             return await result.Skip(startRow).Take(pageLength).ToListAsync();
         }
 
-        public virtual TEntity Get(object id, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
+        public virtual TEntity Get(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
-
-            TEntity data = _context.Set<TEntity>().Find(id);
-            IQueryable<TEntity> query = _context.Set<TEntity>();
+            var query = _context.Set<TEntity>().Where(filter);
             if (includes != null)
             {
                 query = includes(query);
             }
-
-            return query.SingleOrDefault(x => (object)x.Id == (object)data.Id);
+            return query.FirstOrDefault();
         }
 
-        public virtual Task<TEntity> GetAsync(object id, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
+        public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
-            TEntity data = _context.Set<TEntity>().Find(id);
-
-            IQueryable<TEntity> query = _context.Set<TEntity>();
-
+            var query = _context.Set<TEntity>().Where(filter);
             if (includes != null)
             {
                 query = includes(query);
             }
 
-            return query.SingleOrDefaultAsync(x => (object)x.Id == (object)data.Id);
+            return await query.FirstOrDefaultAsync();
         }
 
         public virtual IEnumerable<TEntity> Query(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, 
@@ -147,10 +141,12 @@ namespace MembershipManagement.Domain.Repositories
             return await result.Skip(startRow).Take(pageLength).ToListAsync();
         }
 
-        public virtual void Add(TEntity entity)
+        public virtual object Add(TEntity entity)
         {
             if (entity == null) throw new InvalidOperationException("Unable to add a null entity to the repository.");
             _context.Set<TEntity>().Add(entity);
+            _context.SaveChanges();
+            return entity.Id;
         }
 
         public virtual TEntity Update(TEntity entity)

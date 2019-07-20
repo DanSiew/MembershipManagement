@@ -1,146 +1,160 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MembershipManagement.Api.Tokens;
+using MembershipManagement.Business.Factories;
+using MembershipManagement.Business.Interfaces;
+using MembershipManagement.Business.Logic;
+using MembershipManagement.Domain;
+using MembershipManagement.Domain.Models;
+using MembershipManagement.Domain.Repositories;
+using MembershipManagement.Web.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Principal;
-using TokenProvider;
-using MembershipManagement.Domain;
-using Microsoft.EntityFrameworkCore;
-using MembershipManagement.Domain.Repositories;
-using MembershipManagement.Domain.Models;
+using System;
+using System.Text;
 
 namespace MembershipManagement.Web
 {
-  public class Startup
-  {
-    public Startup(IHostingEnvironment env)
+    public class Startup
     {
-      var builder = new ConfigurationBuilder()
-          .SetBasePath(env.ContentRootPath)
-          .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-          .AddEnvironmentVariables();
-      Configuration = builder.Build();
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<MembershipContext>(options =>
+                      options.UseSqlServer(connectionString));
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            services.AddScoped<IUrlHelper>(x =>
+            {
+                var actionContext = x.GetService<IActionContextAccessor>().ActionContext;
+                return new UrlHelper(actionContext);
+            });
+
+            services.AddTransient<IGenericRepository<MembershipRole>, GenericRepository<MembershipRole, Guid>>();
+            services.AddTransient<IGenericRepository<MembershipUser>, GenericRepository<MembershipUser, Guid>>();
+            services.AddTransient<IGenericRepository<MembershipClient>, GenericRepository<MembershipClient, Guid>>();
+            services.AddTransient<IGenericRepository<MembershipToken>, GenericRepository<MembershipToken, Guid>>();
+            services.AddTransient<ITokenProvider, TokenProvider>();
+            services.AddTransient<IMembershipUserFactory, MembershipUserFactory>();
+            services.AddTransient<IMembershipUserObject, MembershipUserObject>();
+            services.AddTransient<ISecuredPasswordHasher, SecuredPasswordHasher>();
+
+            services.Configure<Audience>(Configuration.GetSection("Audience"));
+
+            services.AddOptions();
+
+            //configure the jwt   
+            ConfigureJwtAuthService(services);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
+            app.Use(async (c, next) =>
+            {
+                if (c.Request.Path == "/")
+                {
+                    c.Response.Headers.Add("Cache-Control", "no-store,no-cache");
+                    c.Response.Headers.Add("Pragma", "no-cache");
+                }
+
+                await next();
+            });
+
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
+        }
+
+        public void ConfigureJwtAuthService(IServiceCollection services)
+        {
+            var audienceConfig = Configuration.GetSection("Audience");
+            var symmetricKeyAsBase64 = audienceConfig["Secret"];
+            var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
+            var signingKey = new SymmetricSecurityKey(keyByteArray);
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                // The signing key must match!  
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = signingKey,
+
+                // Validate the JWT Issuer (iss) claim  
+                ValidateIssuer = true,
+                ValidIssuer = audienceConfig["Iss"],
+
+                // Validate the JWT Audience (aud) claim  
+                ValidateAudience = true,
+                ValidAudience = audienceConfig["Aud"],
+
+                // Validate the token expiry  
+                ValidateLifetime = true,
+
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = tokenValidationParameters;
+            });
+        }
     }
-
-    public IConfigurationRoot Configuration { get; set; }
-
-
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
-    {
-      var connectionString = Configuration.GetConnectionString("DefaultConnection");
-      services.AddDbContext<MembershipContext>(options =>
-                options.UseSqlServer(connectionString));
-
-
-      services.AddTransient<IGenericRepository<MembershipRole>, GenericRepository<MembershipRole, int>>();
-      services.AddScoped<IGenericRepository<MembershipUser>, GenericRepository<MembershipUser, Guid>>();
-
-      // Add framework services.
-      services.AddMvc();
-    }
-
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-    {
-      loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-      loggerFactory.AddDebug();
-
-      ConfigureAuth(app);
-
-      app.UseDefaultFiles();
-      app.UseStaticFiles();
-
-      app.UseMvc();
-
-    }
-
-    // The secret key every token will be signed with.
-    // Keep this safe on the server!
-    private static readonly string secretKey = "mysupersecret_secretkey!123";
-
-    private void ConfigureAuth(IApplicationBuilder app)
-    {
-      var signingKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(secretKey));
-
-      app.UseTokenProvider(new TokenProviderOptions
-      {
-        Path = "/api/token",
-        Audience = "ExampleAudience",
-        Issuer = "ExampleIssuer",
-        SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
-        IdentityResolver = GetIdentity,
-        Expiration = TimeSpan.FromMinutes(30)
-      });
-
-      var tokenValidationParameters = new TokenValidationParameters
-      {
-        // The signing key must match!
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = signingKey,
-
-        // Validate the JWT Issuer (iss) claim
-        ValidateIssuer = true,
-        ValidIssuer = "ExampleIssuer",
-
-        // Validate the JWT Audience (aud) claim
-        ValidateAudience = true,
-        ValidAudience = "ExampleAudience",
-
-        // Validate the token expiry
-        ValidateLifetime = true,
-
-        // If you want to allow a certain amount of clock drift, set that here:
-        ClockSkew = TimeSpan.Zero
-      };
-
-      app.UseJwtBearerAuthentication(new JwtBearerOptions
-      {
-        AutomaticAuthenticate = true,
-        AutomaticChallenge = true,
-        TokenValidationParameters = tokenValidationParameters
-      });
-
-      app.UseCookieAuthentication(new CookieAuthenticationOptions
-      {
-        AutomaticAuthenticate = true,
-        AutomaticChallenge = true,
-        AuthenticationScheme = "Cookie",
-        CookieName = "access_token",
-        TicketDataFormat = new CustomJwtDataFormat(
-              SecurityAlgorithms.HmacSha256,
-              tokenValidationParameters)
-      });
-    }
-
-    private Task<ClaimsIdentity> GetIdentity(string username, string password)
-    {
-      // Don't do this in production, obviously!
-      if (username.ToUpper() == "TEST" && password == "TEST123")
-      {
-        Claim[] claims = new Claim[] { };
-        var claimsIdentity = new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { });
-        claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, "test@hotmail.com"));
-        claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, "Danny"));
-        claimsIdentity.AddClaim(new Claim(ClaimTypes.Surname, "Siew"));
-        claimsIdentity.AddClaim(new Claim(ClaimTypes.SerialNumber, Guid.NewGuid().ToString()));
-        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-
-        return Task.FromResult(claimsIdentity);
-
-        //return Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { }));
-      }
-
-      // Credentials are invalid, or account doesn't exist
-      return Task.FromResult<ClaimsIdentity>(null);
-    }
-  }
 }
