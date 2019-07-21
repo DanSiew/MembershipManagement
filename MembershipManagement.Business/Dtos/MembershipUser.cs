@@ -16,6 +16,8 @@ namespace MembershipManagement.Business.Dtos
 
         public string ClientCode { get; set; }
 
+        public string ClientSecret { get; set; }
+
         public string Href { get; set; }
 
         public bool IsAuthenticated { get; set;}

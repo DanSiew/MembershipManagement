@@ -53,17 +53,19 @@ namespace MembershipManagement.Web.Controllers
                     return BadRequest(errorResponse);
 
                 }
+
                 return Ok(responseData);
             }
-            else if (parameters.grant_type == "refresh_token")
-            {
-                return Ok(_tokenProvider.DoRefreshToken(parameters));
-            }
+            //else if (parameters.grant_type == "refresh_token")
+            //{
+            //    return Ok(_tokenProvider.DoRefreshToken(parameters));
+            //}
             else
             {
                 return BadRequest(new ResponseData
                 {
-                    Message = "bad request"
+                    Message = "bad request",
+                    Data = null
                 });
             }
         }

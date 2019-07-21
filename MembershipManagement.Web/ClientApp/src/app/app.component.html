@@ -1,26 +1,26 @@
 <ng-container *ngIf="isLoaded; then loadedScreen; else loadingScreen">
 </ng-container>
 
+<ng-template #loadedScreen>
+  <app-nav-menu *ngIf="isNavMenuExpanded$ | async"></app-nav-menu>
 
-  <ng-template #loadedScreen>
-    <app-nav-menu *ngIf="isNavMenuExpanded$ | async"></app-nav-menu>
-
-    <div class="main d-flex flex-column">
-      <app-header></app-header>
-      <div id="mm-scroll-container" class="scroll-container flex-grow-1 d-flex flex-column">
-        <div class="content flex-grow-1">
-          <!-- Page Main Content -->
-          <router-outlet></router-outlet>
-        </div>
+  <div class="main d-flex flex-column">
+    <app-header></app-header>
+    <div id="mm-scroll-container" class="scroll-container flex-grow-1 d-flex flex-column">
+      <div class="content flex-grow-1">
+        <!-- Page Main Content -->
+        <router-outlet></router-outlet>
       </div>
     </div>
-  </ng-template>
-
-
-  <ng-template #loadingScreen>
-    <div class="loader mx-auto"></div>
-  </ng-template>
-
-
-  <div *ngIf="isNavMenuOverlayVisible$ | async" class="nav-menu-overlay">
   </div>
+</ng-template>
+
+
+<ng-template #loadingScreen>
+  <div class="loader mx-auto"></div>
+</ng-template>
+
+
+<div *ngIf="isNavMenuOverlayVisible$ | async" class="nav-menu-overlay">
+</div>
+

@@ -5,7 +5,6 @@ import { AppNgbModule } from 'app/app.ngb.module';
 import { LoginComponent, SignupComponent } from 'app/auth-components';
 import { SignupButtonComponent } from 'app/auth-components/signup-button/signup-button.component';
 import { CommonSharedComponentModule } from 'app/common-shared/common-shared-component.module';
-import { AuthService } from 'app/auth-components/services/auth.service';
 import { LoginButtonComponent } from 'app/auth-components/login-button/login-button.component';
 import { LogoutButtonComponent } from 'app/auth-components/logout-button/logout-button.component';
 
@@ -44,9 +43,7 @@ export class AuthComponentModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: AuthComponentModule,
-      providers: [
-        AuthService
-      ]
+      providers: [ ]
     };
   }
 }

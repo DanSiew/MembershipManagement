@@ -18,13 +18,13 @@ namespace MembershipManagement.Business.Logic
 {
     public class MembershipUserObject : IMembershipUserObject
     {
-        private IGenericRepository<MembershipClient> _membershipClientRepo;
-        private IGenericRepository<MembershipRole> _membershipRoleRepo;
-        private IGenericRepository<MembershipUser> _membershipUserRepo;
-        public IMembershipUserFactory _membershipUserFactory;
+        private readonly IGenericRepository<MembershipClient> _membershipClientRepo;
+        private readonly IGenericRepository<MembershipRole> _membershipRoleRepo;
+        private readonly IGenericRepository<MembershipUser> _membershipUserRepo;
+        private readonly IMembershipUserFactory _membershipUserFactory;
         private readonly IUrlHelper _urlHelper;
         private readonly ILogger<MembershipUserObject> _log;
-        private ISecuredPasswordHasher _passwordHasher;
+        private readonly ISecuredPasswordHasher _passwordHasher;
 
 
         public MembershipUserObject(

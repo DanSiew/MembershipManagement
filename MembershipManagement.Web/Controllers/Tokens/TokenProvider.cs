@@ -40,18 +40,38 @@ namespace MembershipManagement.Api.Tokens
         {
             var filterBy = new Filter<MembershipUser>(
                 filter => (filter.Email == parameters.username));
-            var user = _membershipUserRepo.Query(filterBy.Expression).FirstOrDefault();
-
-            var filterClientBy = new Filter<MembershipClient>(filter => (filter.ClientCode == parameters.client_code));
-            var client = _membershipClient.Query(filterClientBy.Expression).FirstOrDefault();
-
-            var isValidated = false;
-            if (client.ClientSecret == parameters.client_secret)
+            var user = _membershipUserRepo.Query(filterBy.Expression ).FirstOrDefault();
+            if (user != null)
             {
-                isValidated = _passwordHasher.VerifyHashedPassword(user.Password, parameters.password);
-            }
+                var filterClientBy = new Filter<MembershipClient>(filter => (filter.ClientCode == parameters.client_code));
+                var client = _membershipClient.Query(filterClientBy.Expression).FirstOrDefault();
 
-            if (!isValidated)
+                var isValidated = false;
+                if (client.ClientSecret == parameters.client_secret)
+                {
+                    isValidated = _passwordHasher.VerifyHashedPassword(user.Password, parameters.password);
+                }
+
+                if (!isValidated)
+                {
+                    return new ResponseData
+                    {
+                        Message = "The username or password you have entered is incorrect. Please try again.",
+                        Data = null
+                    };
+                }
+
+                var refresh_token = Guid.NewGuid().ToString().Replace("-", "");
+                return new ResponseData
+                {
+                    Message = "",
+                    Data = GetJwt(parameters.username, client.Id.ToString(), refresh_token),
+                    UserId = user.Id.ToString(),
+                    UserEmail = user.Email,
+                    IsAuthenticated = true
+                };
+            }
+            else
             {
                 return new ResponseData
                 {
@@ -60,23 +80,6 @@ namespace MembershipManagement.Api.Tokens
                 };
             }
 
-            var refresh_token = Guid.NewGuid().ToString().Replace("-", "");
-            /*
-            var rToken = new MembershipToken
-            {
-                UserId = client.Id,
-                RefreshToken = refresh_token,
-                IsStop = false
-            };
-            var id = _membershipToken.Add(rToken);
-            */
-
-            return new ResponseData
-            {
-                Message = "",
-                Data = GetJwt(parameters.username, client.Id.ToString(), refresh_token),
-                UserId = user.Id.ToString()
-            };
         }
 
 
@@ -138,7 +141,6 @@ namespace MembershipManagement.Api.Tokens
             };
 
             var addFlag = _membershipToken.Add(newToken);
-
             if (updateFlag == token && addFlag.ToString() == newToken.Id.ToString())
             {
                 return new ResponseData
@@ -168,7 +170,6 @@ namespace MembershipManagement.Api.Tokens
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(), ClaimValueTypes.Integer64),
             new Claim(JwtRegisteredClaimNames.Email, email)
-
             };
 
             var symmetricKeyAsBase64 = _settings.Value.Secret;

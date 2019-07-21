@@ -11,5 +11,7 @@ namespace MembershipManagement.Web.Models
         public string Data { get; set; }
         public string SessionId { get; set; }
         public string UserId { get; set; }
+        public string UserEmail { get; set; }
+        public bool IsAuthenticated { get; set; }
     }
 }

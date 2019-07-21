@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { DialogService } from 'app/services/dialog.service';
 import { GenericService } from 'app/services/generic.service';
 import { NavigationService } from 'app/services/navigation.service';
+import { UtilitiesService } from 'app/services/utilities.service';
 
 @NgModule()
 export class ServiceModule {
@@ -11,7 +12,8 @@ export class ServiceModule {
       providers: [
         DialogService,
         GenericService,
-        NavigationService
+        NavigationService,
+        UtilitiesService
       ]
     };
   }

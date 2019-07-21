@@ -18,7 +18,7 @@ namespace MembershipManagement.Web.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        private IMembershipUserObject _membershipUserObject;
+        private readonly IMembershipUserObject _membershipUserObject;
         private readonly ILogger<UsersController> _log;
 
         public UsersController(IMembershipUserObject membershipUserObject, ILogger<UsersController> log)
@@ -33,9 +33,6 @@ namespace MembershipManagement.Web.Controllers
             // by the UseJwtBearerAuthentication middleware
             var id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
             var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email);
-            //var id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.SerialNumber);
-            //var firstName = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.GivenName);
-            //var lastName = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Surname);
             //var role = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role);
 
 

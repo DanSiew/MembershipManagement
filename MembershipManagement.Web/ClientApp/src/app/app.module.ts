@@ -10,6 +10,7 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from 'app/reducers';
+import { ToastrModule } from "ngx-toastr";
 import { environment } from '../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { GenericModule } from 'app/reducer-stores/generic-module/generic-module';
@@ -17,6 +18,7 @@ import { SharedProvider } from 'app/app-components/providers/app.shared.provider
 import { AppNgbModule } from 'app/app.ngb.module';
 import { AuthComponentModule } from 'app/auth-components/auth.component.module';
 import { ServiceModule } from './services/service.module';
+import { AuthModule } from './reducer-stores/auth-module/auth.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { ServiceModule } from './services/service.module';
     MainComponentModule,
     BrowserAnimationsModule,
     AppNgbModule,
+    ToastrModule.forRoot({ timeOut: 5000, positionClass: 'toast-bottom-right', preventDuplicates: true, }),
     AuthComponentModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.forRoot(reducers, {
@@ -43,7 +46,9 @@ import { ServiceModule } from './services/service.module';
       }
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    GenericModule.forRoot()
+    GenericModule.forRoot(),
+    AuthModule.forRoot()
+
   ],
   providers: [
     { provide: 'CLIENT', useFactory: SharedProvider.getClients },

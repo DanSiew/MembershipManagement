@@ -1,10 +1,10 @@
 <div class="signup-view-container">
+  <form autocomplete="off" novalidate [formGroup]="form">
 
-  <div class="d-flex flex-column signup-view-content">
+    <div class="d-flex flex-column signup-view-content">
 
-    <p>Please fill in this form to sign up.</p>
+      <p>Please fill in this form to sign up.</p>
 
-    <form autocomplete="off" novalidate [formGroup]="form">
 
       <div class="messages messages-error" *ngIf="errors?.length">
         <div class="messages-container">
@@ -32,22 +32,24 @@
                             [formControl]="form.controls.confirmPassword">
         </app-password-input>
       </div>
-    </form>
-  </div>
-
-  <div class="dialog-footer">
-    <div class="d-flex justify-content-between">
-      <button type="button" class="btn btn-outline-dark" (click)="closeClick()">
-        {{dialogData?.buttonCloseText}}
-      </button>
-      <button type="button" class="btn btn-primary" (click)="signUp()">
-        {{dialogData?.buttonOkText}}
-      </button>
     </div>
-  </div>
+
+    <div class="dialog-footer">
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-dark" aria-label="Close" (click)="closeClick()">
+          {{dialogData?.buttonCloseText}}
+        </button>
+        <button type="submit" class="btn btn-primary" (click)="signUp()"
+                aria-label="Sign in" [ngClass]="{'btn-disabled': signing || form.invalid }">
+          {{dialogData?.buttonOkText}}
+        </button>
+
+      </div>
+    </div>
+  </form>
 
 </div>
 
 <div *ngIf="showOverlay$ | async as showOverlay" class="dialog-overlay">
-  <div class="user-loader mx-auto"></div>
+  <div class="loader mx-auto"></div>
 </div>

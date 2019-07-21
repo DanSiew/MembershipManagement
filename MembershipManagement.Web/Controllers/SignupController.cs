@@ -29,21 +29,28 @@ namespace MembershipManagement.Web.Controllers
 
         // POST api/Signup
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Business.Dtos.MembershipUser memberShipUserDto)
+        public async Task<IActionResult> Post([FromBody]Business.Dtos.MembershipUser memberShipUser)
         {
-            var logObject = $"Sign-up Create - {memberShipUserDto.Email}";
+            var logObject = $"Sign-up Create - {memberShipUser.Email}";
             try
             {
-                var result = await _membershipUserObject.AddAsync(memberShipUserDto);
+                var result = await _membershipUserObject.AddAsync(memberShipUser);
                 if (!result.Status)
                 {
                     return BadRequest(result.ErrorResponse);
                 }
+                var parameters = new Parameters
+                {
+                    client_code = memberShipUser.ClientCode,
+                    client_secret = memberShipUser.ClientSecret,
+                    grant_type = "password",
+                    username = memberShipUser.Email,
+                    password = memberShipUser.Password
+                };
 
-                var refresh_token = Guid.NewGuid().ToString().Replace("-", "");
-                result.Data = _tokenProvider.GetJwt(result.MembershipUserDtos.Email, result.MembershipUserDtos.ClientCode, refresh_token);
-                result.MembershipUserDtos.IsAuthenticated = true;
-                return Created(result.MembershipUserDtos.Href, result);
+                var responseData = _tokenProvider.DoPassword(parameters);
+
+                return Ok(responseData); 
 
             }
 
